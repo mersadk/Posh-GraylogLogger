@@ -13,7 +13,8 @@ function Write-GLLog {
     $regexResult = [regex]::Matches($logText,"(?<start>\{)+(?<property>[\w\.\[\]]+)(?<format>:[^}]+)?(?<end>\})+")
     $currentLogProperties = $global:GLLoggingProperties.Clone()
     $currentLogProperties['level'] = $LogLevel
-    $currentLogProperties['timestamp'] = [Math]::Floor( [decimal] (Get-Date ([dateTime]::Now.ToUniversalTime()) -UFormat '%s'));
+    $currentLogProperties['version'] = '1.1'
+    $currentLogProperties['timestamp'] = [decimal]((Get-Date ([dateTime]::Now.ToUniversalTime()) -UFormat '%s') -replace ",", ".");
     Microsoft.PowerShell.Utility\Write-Debug "found $($regexResult.Count) placeholders for structured logging"
     if($regexResult.Count -ne $PropertyValues.Count) {
         throw "unable create log entry. structured log placeholders amount does not match PropertyValues amount"
